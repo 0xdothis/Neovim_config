@@ -29,16 +29,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
    end,
 })
-
+-- Autocommand for Solidity files
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.sol",
     callback = function()
-        local filepath = vim.fn.expand("%:p") -- Get the full path of the current file
-        vim.fn.system({ "forge", "fmt", filepath }) -- Run forge fmt on the file
-        vim.cmd("e!") -- Reload the file
+        vim.cmd("silent! !forge fmt %") -- Run forge fmt
+        vim.cmd("e!")                   -- Reload the file to reflect changes
     end,
 })
 
+-- Autocommand for Rust files
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.rs",
     callback = function()
