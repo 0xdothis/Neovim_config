@@ -30,6 +30,7 @@ require("lazy").setup({
       dependencies = { "nvim-lua/plenary.nvim" },
     },
 
+
     -- import/override with your plugins
     { import = "plugins" },
   },
