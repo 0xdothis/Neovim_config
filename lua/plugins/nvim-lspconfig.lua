@@ -9,28 +9,7 @@ local config = function()
 	local capabilities = cmp_nvim_lsp.default_capabilities()
 
 	
-lspconfig.rust_analyzer.setup({
-    capabilities = capabilities,
-    on_attach = function(client, bufnr)
-        print("rust-analyzer attached to buffer", bufnr)
-        if client.supports_method("textDocument/formatting") then
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = bufnr,
-                callback = function()
-                    print("Formatting Rust buffer", bufnr)
-                    vim.lsp.buf.format({ async = false })
-                end,
-            })
-        end
-    end,
-    settings = {
-        ["rust-analyzer"] = {
-            checkOnSave = {
-                command = "clippy", 
-            },
-        },
-    },
-})
+
     -- solidity
     lspconfig.solidity_ls.setup({
         capabilities = capabilities,
