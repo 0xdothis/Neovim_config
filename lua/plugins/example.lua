@@ -39,6 +39,7 @@ return {
       table.insert(opts.sources, { name = "emoji" })
     end,
   },
+  
   {
   'nvim-neo-tree/neo-tree.nvim',
   config = function()
@@ -200,3 +201,4 @@ return {
     },
   },
 }
+

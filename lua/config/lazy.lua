@@ -29,8 +29,6 @@ require("lazy").setup({
       "jose-elias-alvarez/null-ls.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
     },
-
-
     -- import/override with your plugins
     { import = "plugins" },
   },
