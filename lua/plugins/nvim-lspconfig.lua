@@ -8,7 +8,35 @@ local config = function()
   local lspconfig = require("lspconfig")
   local capabilities = cmp_nvim_lsp.default_capabilities()
 
-  -- solidity
+  -- Define highlight groups for diagnostics
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#FF0000", bold = true }) -- Red for errors
+  vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#FFFF00", bold = true }) -- Yellow for warnings
+  vim.api.nvim_set_hl(0, "DiagnosticSignError", { fg = "#FF0000" }) -- Red for error signs
+  vim.api.nvim_set_hl(0, "DiagnosticSignWarn", { fg = "#FFFF00" }) -- Yellow for warning signs
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#FF0000" }) -- Red undercurl for errors
+  vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = "#FFFF00" }) -- Yellow undercurl for warnings
+
+  -- Enable inline diagnostics with custom colors
+  vim.diagnostic.config({
+    virtual_text = {
+      prefix = "●", -- Marker for errors/warnings
+      source = "if_many", -- Show source if multiple diagnostics
+      format = function(diagnostic)
+        if diagnostic.severity == vim.diagnostic.severity.ERROR then
+          return string.format("%s %s", diagnostic.message, "[Error]")
+        elseif diagnostic.severity == vim.diagnostic.severity.WARN then
+          return string.format("%s %s", diagnostic.message, "[Warn]")
+        end
+        return diagnostic.message
+      end,
+    },
+    signs = true, -- Gutter signs
+    underline = true, -- Underline errors/warnings
+    update_in_insert = false, -- Update after leaving insert mode
+    severity_sort = true, -- Prioritize errors over warnings
+  })
+
+  -- Solidity
   lspconfig.solidity_ls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
@@ -25,13 +53,12 @@ local config = function()
     },
   })
 
-  -- lua
+  -- Lua
   lspconfig.lua_ls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
-    settings = { -- custom settings for lua
+    settings = {
       Lua = {
-        -- make the language server recognize "vim" global
         diagnostics = {
           globals = { "vim" },
         },
@@ -45,14 +72,14 @@ local config = function()
     },
   })
 
-  -- json
+  -- JSON
   lspconfig.jsonls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
     filetypes = { "json", "jsonc" },
   })
 
-  -- python
+  -- Python
   lspconfig.pyright.setup({
     capabilities = capabilities,
     on_attach = on_attach,
@@ -69,7 +96,7 @@ local config = function()
     },
   })
 
-  -- typescript
+  -- TypeScript
   lspconfig.ts_ls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
@@ -90,14 +117,14 @@ local config = function()
     },
   })
 
-  -- bash
+  -- Bash
   lspconfig.bashls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
     filetypes = { "sh", "aliasrc" },
   })
 
-  -- typescriptreact, javascriptreact, css, sass, scss, less, svelte, vue
+  -- Emmet (web dev)
   lspconfig.emmet_ls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
@@ -115,7 +142,7 @@ local config = function()
     },
   })
 
-  -- docker
+  -- Docker
   lspconfig.dockerls.setup({
     capabilities = capabilities,
     on_attach = on_attach,
@@ -131,11 +158,13 @@ local config = function()
     },
   })
 
+  -- Define diagnostic signs (ensure they match the colors)
   for type, icon in pairs(diagnostic_signs) do
     local hl = "DiagnosticSign" .. type
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
   end
 
+  -- EFM setup
   local solhint = require("efmls-configs.linters.solhint")
   local prettier_d = require("efmls-configs.formatters.prettier_d")
   local luacheck = require("efmls-configs.linters.luacheck")
@@ -150,8 +179,6 @@ local config = function()
   local cpplint = require("efmls-configs.linters.cpplint")
   local clangformat = require("efmls-configs.formatters.clang_format")
 
-
-  -- configure efm server
   lspconfig.efm.setup({
     filetypes = {
       "lua",

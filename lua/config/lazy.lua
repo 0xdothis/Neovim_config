@@ -21,6 +21,16 @@ require("lazy").setup({
     {'hrsh7th/nvim-cmp',  -- Completion engine (must-have)
       enabled = true,
     },
+    -- Telescope
+    {
+      "nvim-telescope/telescope.nvim",
+      dependencies = { "nvim-lua/plenary.nvim" },
+      config = function()
+        require("telescope").setup({})
+      end,
+    },
+        -- Add vscode.nvim as the desired theme
+    { "Mofiqul/vscode.nvim" },
     {'hrsh7th/cmp-nvim-lsp'},  -- LSP source
     {'hrsh7th/cmp-buffer'},  -- Buffer source
     {'hrsh7th/cmp-path'},  -- Path completion
@@ -63,3 +73,9 @@ require("lazy").setup({
   },
 })
 
+-- Apply vscode.nvim after the UI is fully loaded and the loading screen is gone
+vim.api.nvim_create_autocmd("UIEnter", {
+  callback = function()
+    vim.cmd("colorscheme vscode")
+  end,
+})
