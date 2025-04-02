@@ -1,6 +1,7 @@
 local on_attach = require("util.lsp").on_attach
 local diagnostic_signs = require("util.icons").diagnostic_signs
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
+local keybindings = require('config.jump-to-definition')
 
 local config = function()
   require("neoconf").setup({})
@@ -36,23 +37,23 @@ local config = function()
     severity_sort = true, -- Prioritize errors over warnings
   })
 
-  -- Solidity
-  lspconfig.solidity_ls.setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
-    filetypes = { "solidity" },
-    root_dir = lspconfig.util.root_pattern("hardhat.config.*", "foundry.toml", "remappings.txt", ".git"),
-    settings = {
-      solidity = {
-        includePath = "",
-        remappings = {
-          ["@openzeppelin/"] = "lib/openzeppelin-contracts/",
-          ["account-abstraction/"] = "lib/account-abstraction/",
-        },
+-- Solidity (Nomic Foundation)
+lspconfig.solidity.setup({
+  cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
+  capabilities = capabilities,
+  on_attach = keybindings.on_attach,
+  filetypes = { "solidity" },
+  root_dir = lspconfig.util.root_pattern("hardhat.config.*", "foundry.toml", "remappings.txt", ".git"),
+  settings = {
+    solidity = {
+      includePath = "", -- Add custom include paths if needed
+      remappings = {
+        ["@openzeppelin/"] = "node_modules/@openzeppelin/",
+        ["@chainlink/"] = "node_modules/@chainlink/",
       },
     },
-  })
-
+  },
+})
   -- Lua
   lspconfig.lua_ls.setup({
     capabilities = capabilities,

@@ -21,6 +21,8 @@ require("lazy").setup({
     {'hrsh7th/nvim-cmp',  -- Completion engine (must-have)
       enabled = true,
     },
+      { "ryanoasis/vim-devicons", lazy = true, event = "VeryLazy" }, -- Minimal setup
+
     -- Telescope
     {
       "nvim-telescope/telescope.nvim",
