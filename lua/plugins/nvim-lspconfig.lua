@@ -1,7 +1,7 @@
 local on_attach = require("util.lsp").on_attach
 local diagnostic_signs = require("util.icons").diagnostic_signs
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
-local keybindings = require('config.jump-to-definition')
+local keybindings = require("config.jump-to-definition")
 
 local config = function()
   require("neoconf").setup({})
@@ -37,23 +37,39 @@ local config = function()
     severity_sort = true, -- Prioritize errors over warnings
   })
 
--- Solidity (Nomic Foundation)
-lspconfig.solidity.setup({
-  cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
-  capabilities = capabilities,
-  on_attach = keybindings.on_attach,
-  filetypes = { "solidity" },
-  root_dir = lspconfig.util.root_pattern("hardhat.config.*", "foundry.toml", "remappings.txt", ".git"),
-  settings = {
-    solidity = {
-      includePath = "", -- Add custom include paths if needed
-      remappings = {
-        ["@openzeppelin/"] = "node_modules/@openzeppelin/",
-        ["@chainlink/"] = "node_modules/@chainlink/",
+  -- Solidity (Nomic Foundation)
+
+  -- Fetch Foundry remappings dynamically
+  local function get_foundry_remappings()
+    local handle = io.popen("forge remappings 2>/dev/null")
+    if not handle then
+      return {}
+    end
+    local result = handle:read("*a")
+    handle:close()
+    local remappings = {}
+    for line in result:gmatch("[^\n]+") do
+      local key, value = line:match("([^=]+)=(.+)")
+      if key and value then
+        remappings[key] = value
+      end
+    end
+    return remappings
+  end
+  -- Solidity (Nomic Foundation)
+  lspconfig.solidity.setup({
+    cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
+    capabilities = capabilities,
+    on_attach = keybindings.on_attach,
+    filetypes = { "solidity" },
+    root_dir = lspconfig.util.root_pattern("foundry.toml", "hardhat.config.*", "remappings.txt", ".git"),
+    settings = {
+      solidity = {
+        includePath = "lib", -- Default Foundry include path, ignored if unused
+        remappings = get_foundry_remappings(), -- Dynamic, empty if not Foundry
       },
     },
-  },
-})
+  })
   -- Lua
   lspconfig.lua_ls.setup({
     capabilities = capabilities,
@@ -210,6 +226,7 @@ lspconfig.solidity.setup({
     },
     settings = {
       languages = {
+        solidity = { solhint },
         lua = { luacheck, stylua },
         python = { flake8, black },
         typescript = { eslint, prettier_d },
@@ -245,3 +262,4 @@ return {
     "hrsh7th/cmp-nvim-lsp",
   },
 }
+
