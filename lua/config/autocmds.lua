@@ -37,7 +37,48 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.cmd("e!") -- Reload the file to reflect changes
   end,
 })
+-- For Lua config
+vim.cmd([[
+  highlight Bold gui=NONE cterm=NONE
+  hi! link htmlBold Bold
+  hi! link markdownBold Bold
+]])
 
+-- Format move files
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.move",
+  callback = function()
+    vim.lsp.buf.format({
+      async = false,
+      filter = function(client)
+        return client.name == "move_analyzer" -- Only use Move LSP formatter
+      end,
+    })
+  end,
+})
+
+-- Auto-format SQL files on save using sqlfluff (PostgreSQL dialect)
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.sql",
+  callback = function()
+    -- Save cursor position
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    -- Format with sqlfluff (PostgreSQL mode)
+    vim.cmd("%!sqlfluff fix --dialect postgres -")
+    -- Restore cursor
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+  end,
+})
+
+-- Auto-format PostgreSQL/SQL files on save
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*.sql",
+--   callback = function()
+--     local cursor_pos = vim.api.nvim_win_get_cursor(0)
+--     vim.cmd("%!pg_format -g -") -- 👈 '-g' removes space in functions
+--     vim.api.nvim_win_set_cursor(0, cursor_pos)
+--   end,
+-- })
 -- Autocommand for Rust files
 -- vim.api.nvim_create_autocmd("BufWritePre", {
 --     pattern = "*.rs",
@@ -46,3 +87,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 --     end,
 -- })
 
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = { "*.ts", "*.tsx", "*.jsx", "*.css", "*.scss", "*.html" },
+--   callback = function()
+--     vim.lsp.buf.format({ async = false })
+--   end,
+-- })

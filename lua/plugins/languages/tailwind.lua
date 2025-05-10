@@ -1,0 +1,44 @@
+-- return {
+--   {
+--     "neovim/nvim-lspconfig",
+--     opts = {
+--       servers = {
+--         tailwindcss = {},
+--       },
+--       setup = {
+--         tailwindcss = function(server, opts)
+--           local tw = require("lspconfig.server_configurations.tailwindcss")
+--           opts.filetypes = opts.filetypes or {}
+--
+--           -- Add default filetypes
+--           vim.list_extend(opts.filetypes, tw.default_config.filetypes)
+--
+--           -- Remove excluded filetypes
+--           local exclude = { "markdown" }
+--           opts.filetypes = vim.tbl_filter(function(ft)
+--             return not vim.tbl_contains(exclude, ft)
+--           end, opts.filetypes)
+--
+--           -- Add any extra filetypes manually (optional)
+--           local include = {} -- e.g., { "astro" }
+--           vim.list_extend(opts.filetypes, include)
+--
+--           -- Phoenix-specific Tailwind support
+--           opts.settings = {
+--             tailwindCSS = {
+--               includeLanguages = {
+--                 elixir = "html-eex",
+--                 eelixir = "html-eex",
+--                 heex = "html-eex",
+--               },
+--             },
+--           }
+--
+--           -- Apply the config
+--           require("lspconfig")[server].setup(opts)
+--           return true -- to prevent LazyVim from auto-configuring it again
+--         end,
+--       },
+--     },
+--   },
+-- }

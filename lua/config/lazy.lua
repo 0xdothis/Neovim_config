@@ -18,11 +18,32 @@ require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    {'hrsh7th/nvim-cmp',  -- Completion engine (must-have)
+    {
+      "hrsh7th/nvim-cmp", -- Completion engine (must-have)
       enabled = true,
     },
-      { "ryanoasis/vim-devicons", lazy = true, event = "VeryLazy" }, -- Minimal setup
-
+    { import = "plugins.languages.astro" },
+    { import = "plugins.languages.docker" },
+    { import = "plugins.languages.go" },
+    { import = "plugins.languages.markdown" },
+    { import = "plugins.languages.mdx" },
+    { import = "plugins.languages.python" },
+    { import = "plugins.languages.tailwind" },
+    { import = "plugins.languages.typescript" },
+    { import = "plugins.test.core" },
+    { import = "plugins.formatting.conform" },
+    { import = "plugins.formatting.prettier" },
+    { import = "plugins.linting.core" },
+    { import = "plugins.util.mini-hipatterns" },
+    { import = "plugins.test.core" },
+    { "ryanoasis/vim-devicons", lazy = true, event = "VeryLazy" }, -- Minimal setup
+    {
+      "yanganto/move.vim",
+      branch = "sui-move",
+    },
+    {
+      "getomni/neovim",
+    },
     -- Telescope
     {
       "nvim-telescope/telescope.nvim",
@@ -31,12 +52,20 @@ require("lazy").setup({
         require("telescope").setup({})
       end,
     },
-        -- Add vscode.nvim as the desired theme
+    -- {
+    --   "Pocco81/auto-save.nvim",
+    --   opts = {
+    --     enabled = true,
+    --     events = { "InsertLeave", "TextChanged" }, -- Save on leaving insert mode or text changes
+    --     write_all_buffers = false, -- Only save current buffer
+    --     debounce_delay = 135, -- Delay to avoid excessive saves
+    --   },
+    -- },
     { "Mofiqul/vscode.nvim" },
-    {'hrsh7th/cmp-nvim-lsp'},  -- LSP source
-    {'hrsh7th/cmp-buffer'},  -- Buffer source
-    {'hrsh7th/cmp-path'},  -- Path completion
-        -- null-ls for formatting
+    { "hrsh7th/cmp-nvim-lsp" }, -- LSP source
+    { "hrsh7th/cmp-buffer" }, -- Buffer source
+    { "hrsh7th/cmp-path" }, -- Path completion
+    -- null-ls for formatting
     {
       "jose-elias-alvarez/null-ls.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
@@ -73,11 +102,31 @@ require("lazy").setup({
       },
     },
   },
+}, {
+  ui = {
+    -- If you are using a Nerd Font: set icons to an empty table which will use the
+    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+    icons = vim.g.have_nerd_font and {} or {
+      cmd = "⌘",
+      config = "🛠",
+      event = "📅",
+      ft = "📂",
+      init = "⚙",
+      keys = "🗝",
+      plugin = "🔌",
+      runtime = "💻",
+      require = "🌙",
+      source = "📄",
+      start = "🚀",
+      task = "📌",
+      lazy = "💤 ",
+    },
+  },
 })
 
 -- Apply vscode.nvim after the UI is fully loaded and the loading screen is gone
-vim.api.nvim_create_autocmd("UIEnter", {
-  callback = function()
-    vim.cmd("colorscheme vscode")
-  end,
-})
+-- vim.api.nvim_create_autocmd("UIEnter", {
+--   callback = function()
+--     vim.cmd("colorscheme vscode")
+--   end,
+-- })

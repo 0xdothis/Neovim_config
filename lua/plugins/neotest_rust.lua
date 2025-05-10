@@ -12,6 +12,5 @@ return {
         require("neotest-rust"),
       },
     })
-
   end,
 }

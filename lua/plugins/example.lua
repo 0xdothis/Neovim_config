@@ -39,13 +39,13 @@ return {
       table.insert(opts.sources, { name = "emoji" })
     end,
   },
-  
-  {
-  'nvim-neo-tree/neo-tree.nvim',
-  config = function()
-  -- Configuration options
-  end
-  },
+
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   config = function()
+  --     -- Configuration options
+  --   end,
+  -- },
   -- change some telescope options and a keymap to browse plugin files
   {
     "nvim-telescope/telescope.nvim",
@@ -201,4 +201,3 @@ return {
     },
   },
 }
-

@@ -1,9 +1,9 @@
 -- lua/plugins/crates.lua
-return  {
-  'Saecki/crates.nvim',
+return {
+  "Saecki/crates.nvim",
   event = { "BufRead Cargo.toml" }, -- Keep this instead of ft = {"toml"} for specificity
-  config = function(_, opts)
-    local crates = require('crates')
+  config = function(_)
+    local crates = require("crates")
     crates.setup({
       completion = {
         crates = {
@@ -18,8 +18,8 @@ return  {
       },
     })
     -- Add nvim-cmp source for the current buffer
-    require('cmp').setup.buffer({
-      sources = { { name = "crates" } }
+    require("cmp").setup.buffer({
+      sources = { { name = "crates" } },
     })
     crates.show() -- Show crate info immediately
     -- Optional: Add keymaps if you have a utils module

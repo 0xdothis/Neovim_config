@@ -37,6 +37,54 @@ local config = function()
     severity_sort = true, -- Prioritize errors over warnings
   })
 
+  -- Move
+  -- 1. Configure Move Analyzer LSP via Mason (if installed through Mason)
+  -- require("lspconfig").move_analyzer.setup({
+  --   cmd = { os.getenv("HOME") .. "/.sui/bin/move-analyzer" },
+  --   filetypes = { "move" },
+  --   root_dir = function(fname)
+  --     return require("lspconfig.util").root_pattern("Move.toml", "sui-move.toml", "Suibase.yaml")(fname)
+  --       or vim.fn.getcwd()
+  --   end,
+  --   settings = {
+  --     sui = {
+  --       enable = true,
+  --       framework_path = os.getenv("HOME") .. "/.sui/sui-framework/packages",
+  --     },
+  --   },
+  -- })
+  --
+
+  require("lspconfig").move_analyzer.setup({
+    cmd = { os.getenv("HOME") .. "/.sui/bin/move-analyzer" },
+    filetypes = { "move" },
+    root_dir = function(fname)
+      return require("lspconfig.util").root_pattern("Move.toml", "sui-move.toml", "Suibase.yaml")(fname)
+        or vim.fn.getcwd()
+    end,
+    -- settings = {
+    --   sui = {
+    --     enable = true,
+    --     framework_path = os.getenv("HOME") .. "/.sui/sui-framework/packages",
+    --   },
+    -- },
+    on_attach = function(client, bufnr)
+      -- Apply your standard keybindings
+      keybindings.on_attach(client, bufnr)
+
+      -- Add any Move-specific keybindings here
+      local move_opts = { buffer = bufnr, silent = true }
+      vim.keymap.set("n", "<leader>mf", function()
+        vim.lsp.buf.format({
+          async = true,
+          filter = function(c)
+            return c.name == "move_analyzer"
+          end,
+        })
+      end, move_opts)
+    end,
+    capabilities = require("cmp_nvim_lsp").default_capabilities(), -- If using nvim-cmp
+  })
   -- Solidity (Nomic Foundation)
 
   -- Fetch Foundry remappings dynamically
@@ -183,7 +231,7 @@ local config = function()
 
   -- EFM setup
   local solhint = require("efmls-configs.linters.solhint")
-  local prettier_d = require("efmls-configs.formatters.prettier_d")
+  local prettier = require("efmls-configs.formatters.prettier")
   local luacheck = require("efmls-configs.linters.luacheck")
   local stylua = require("efmls-configs.formatters.stylua")
   local flake8 = require("efmls-configs.linters.flake8")
@@ -229,19 +277,19 @@ local config = function()
         solidity = { solhint },
         lua = { luacheck, stylua },
         python = { flake8, black },
-        typescript = { eslint, prettier_d },
+        typescript = { eslint, prettier },
         json = { eslint, fixjson },
         jsonc = { eslint, fixjson },
         sh = { shellcheck, shfmt },
-        javascript = { eslint, prettier_d },
-        javascriptreact = { eslint, prettier_d },
-        typescriptreact = { eslint, prettier_d },
-        svelte = { eslint, prettier_d },
-        vue = { eslint, prettier_d },
-        markdown = { prettier_d },
-        docker = { hadolint, prettier_d },
-        html = { prettier_d },
-        css = { prettier_d },
+        javascript = { eslint, prettier },
+        javascriptreact = { eslint, prettier },
+        typescriptreact = { eslint, prettier },
+        svelte = { eslint, prettier },
+        vue = { eslint, prettier },
+        markdown = { prettier },
+        docker = { hadolint, prettier },
+        html = { prettier },
+        css = { prettier },
         c = { clangformat, cpplint },
         cpp = { clangformat, cpplint },
       },
@@ -262,4 +310,3 @@ return {
     "hrsh7th/cmp-nvim-lsp",
   },
 }
-
