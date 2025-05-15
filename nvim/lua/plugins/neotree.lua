@@ -144,6 +144,14 @@ return {
     })
 
     require("neo-tree").setup(opts)
+    -- Set transparent highlights for NeoTree
+    vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "NONE", ctermbg = "NONE" })
+    vim.api.nvim_set_hl(0, "NeoTreeFloatBorder", { bg = "NONE", fg = "NONE" }) -- Adjust fg to match your theme
+    vim.api.nvim_set_hl(0, "NeoTreeFloatTitle", { bg = "NONE", fg = "NONE" })
+    vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { bg = "NONE", fg = "NONE" })
+    vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "NONE", ctermbg = "NONE" })
+    -- End of transparent config
 
     vim.api.nvim_create_autocmd("TermClose", {
       pattern = "*lazygit",
