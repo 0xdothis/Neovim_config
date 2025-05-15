@@ -6,7 +6,9 @@ TERM = "xterm-256color"
 padding.x = 0
 padding.y = 0
 
-decorations = "Buttonless"
+# Not a fan on the buttonless design
+# you can uncomment it if you want
+# decorations = "Buttonless"
 
 opacity = 0.8
 blur = true
