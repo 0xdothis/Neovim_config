@@ -13,7 +13,11 @@ local mason = {
   },
 }
 
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
+local capabilities = cmp_nvim_lsp.default_capabilities()
+
 local mason_lspconfig = {
+  capabilities = capabilities,
   "williamboman/mason-lspconfig.nvim",
   opts = {
     ensure_installed = {
@@ -43,6 +47,8 @@ local mason_lspconfig = {
 
 -- Optionally, configure mason to install non-LSP tools
 local mason_tools = {
+
+  capabilities = capabilities,
   "neovim/nvim-lspconfig",
   dependencies = {
     {
@@ -114,4 +120,3 @@ return {
 -- 	mason,
 -- 	mason_lspconfig,
 -- }
-

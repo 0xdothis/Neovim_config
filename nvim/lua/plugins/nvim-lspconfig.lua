@@ -83,7 +83,25 @@ local config = function()
         })
       end, move_opts)
     end,
-    capabilities = require("cmp_nvim_lsp").default_capabilities(), -- If using nvim-cmp
+    capabilities = capabilities, -- If using nvim-cmp
+  })
+
+  -- Cairo ls
+  lspconfig.cairo_ls.setup({
+    cmd = { "scarb", "cairo-language-server" },
+    filetypes = { "cairo" },
+    init_options = {
+      hostInfo = "neovim",
+    },
+    root_dir = lspconfig.util.root_pattern("Scarb.toml", "cairo_project.toml", ".git"),
+  })
+
+  -- Prevent other LSPs from attaching to .cairo files
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "cairo",
+    callback = function()
+      vim.lsp.start_client(require("lspconfig").cairo_ls)
+    end,
   })
   -- Solidity (Nomic Foundation)
 
@@ -104,6 +122,7 @@ local config = function()
     end
     return remappings
   end
+
   -- Solidity (Nomic Foundation)
   lspconfig.solidity.setup({
     cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
@@ -270,7 +289,7 @@ local config = function()
       hover = true,
       documentSymbol = true,
       codeAction = true,
-      completion = true,
+      completion = false,
     },
     settings = {
       languages = {
