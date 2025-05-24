@@ -26,9 +26,8 @@ M.on_attach = function(client, bufnr)
   end
 
   -- Diagnostics
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+  vim.keymap.set("n", "[d", vim.diagnostic.get_prev, opts)
+  vim.keymap.set("n", "]d", vim.diagnostic.get_next, opts)
 end
 
 return M
-

@@ -17,11 +17,102 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     {
-      "hrsh7th/nvim-cmp", -- Completion engine (must-have)
-      enabled = true,
+      "LazyVim/LazyVim",
+      import = "lazyvim.plugins",
+      opts = {
+        -- Disable LazyVim's default cmp config
+        cmp = {
+          enabled = false,
+        },
+      },
     },
+    -- import/override with your plugins
+    { import = "plugins" },
+
+    {
+      "folke/tokyonight.nvim",
+      opts = {
+        transparent = true,
+        styles = {
+          sidebars = "transparent",
+          floats = "transparent",
+        },
+      },
+    },
+    -- {
+    --   "nvim-neotest/neotest",
+    --   dependencies = {
+    --     "nvim-neotest/nvim-nio",
+    --     "nvim-lua/plenary.nvim",
+    --     "antoinemadec/FixCursorHold.nvim",
+    --     "nvim-treesitter/nvim-treesitter",
+    --     -- This is where you install the adapter:
+    --     "maxandron/neotest-cairo",
+    --   },
+    --   opts = function()
+    --     return {
+    --       adapters = {
+    --         -- This is where you add the adapter:
+    --         require("neotest-cairo"),
+    --       },
+    --       -- The rest of your Neotest configuration
+    --     }
+    --   end,
+    -- },
+    -- {
+    --   "nvim-neotest/neotest",
+    --   dependencies = {
+    --     "llllvvuu/neotest-foundry",
+    --     "nvim-treesitter/nvim-treesitter",
+    --     "nvim-lua/plenary.nvim",
+    --   },
+    -- },
+    -- {
+    --   "nvim-neotest/neotest",
+    --   dependencies = {
+    --     "llllvvuu/neotest-foundry",
+    --     "nvim-treesitter/nvim-treesitter",
+    --     "nvim-lua/plenary.nvim",
+    --   },
+    --   config = function()
+    --     require("neotest").setup({
+    --       adapters = {
+    --         require("neotest-foundry")({
+    --           foundryCommand = "forge test",
+    --         }),
+    --       },
+    --     })
+    --   end,
+    -- }
+    -- {
+    --   "mrcjkb/rustaceanvim",
+    --   version = "^6", -- Recommended
+    --   lazy = false, -- This plugin is already lazy
+    -- },
+
+    {
+      "nvim-treesitter/nvim-treesitter",
+      opts = {
+        ensure_installed = { "cairo" }, -- Add if parser available
+        highlight = { enable = true },
+      },
+    },
+    -- Add or modify this entry for mason-lspconfig.nvim
+    {
+      "williamboman/mason-lspconfig.nvim",
+      lazy = false, -- THIS IS THE CRUCIAL LINE
+      dependencies = { "williamboman/mason.nvim" },
+    },
+    { "tribela/vim-transparent" },
+    {
+      "saghen/blink.cmp",
+      enabled = false,
+    },
+    -- {
+    -- "hrsh7th/cmp-nvim-lsp", -- Completion engine (must-have)
+    -- enabled = true,
+    -- },
     { import = "plugins.languages.astro" },
     { import = "plugins.languages.docker" },
     { import = "plugins.languages.go" },
@@ -32,18 +123,9 @@ require("lazy").setup({
     { import = "plugins.test.core" },
     { import = "plugins.formatting.conform" },
     { import = "plugins.formatting.prettier" },
-    -- { import = "plugins.formatting.move" },
-    { import = "plugins.linting.core" },
+    -- { import = "plugins.linting.core" },
     { import = "plugins.util.mini-hipatterns" },
-    { import = "plugins.test.core" },
-    {
-      "scottmckendry/cyberdream.nvim",
-      lazy = false,
-      priority = 1000,
-      options = {
-        theme = "auto",
-      },
-    },
+
     {
       "christoomey/vim-tmux-navigator",
       cmd = {
@@ -62,14 +144,28 @@ require("lazy").setup({
         { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
       },
     },
+    -- Import foundry test adapter
+    --     {
+    --   'nvim-neotest/neotest',
+    --   dependencies = {
+    --     ...,
+    --     'llllvvuu/neotest-foundry',
+    --   },
+    --   config = {
+    --     ...,
+    --     adapters = {
+    --       require('neotest-foundry')
+    --     }
+    --   }
+    -- },
     { "ryanoasis/vim-devicons", lazy = true, event = "VeryLazy" }, -- Minimal setup
     {
       "yanganto/move.vim",
       branch = "sui-move",
     },
-    {
-      "getomni/neovim",
-    },
+    -- {
+    --   "getomni/neovim",
+    -- },
     -- Telescope
     {
       "nvim-telescope/telescope.nvim",
@@ -95,16 +191,17 @@ require("lazy").setup({
       "onsails/lspkind.nvim",
       lazy = true,
     },
-    {
-      "L3MON4D3/LuaSnip",
-      version = "v2.*",
-      build = "make install_jsregexp",
-      dependencies = {
-        "rafamadriz/friendly-snippets",
-      },
-    },
+    -- {
+    --   "L3MON4D3/LuaSnip",
+    --   version = "v2.*",
+    --   build = "make install_jsregexp",
+    --   dependencies = {
+    --     "rafamadriz/friendly-snippets",
+    --   },
+    -- },
     {
       "hrsh7th/nvim-cmp",
+      enabled = true,
       dependencies = {
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
@@ -118,8 +215,6 @@ require("lazy").setup({
       "jose-elias-alvarez/null-ls.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
     },
-    -- import/override with your plugins
-    { import = "plugins" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -150,28 +245,28 @@ require("lazy").setup({
       },
     },
   },
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = "⌘",
-      config = "🛠",
-      event = "📅",
-      ft = "📂",
-      init = "⚙",
-      keys = "🗝",
-      plugin = "🔌",
-      runtime = "💻",
-      require = "🌙",
-      source = "📄",
-      start = "🚀",
-      task = "📌",
-      lazy = "💤 ",
+  {
+    ui = {
+      -- If you are using a Nerd Font: set icons to an empty table which will use the
+      -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+      icons = vim.g.have_nerd_font and {} or {
+        cmd = "⌘",
+        config = "🛠",
+        event = "📅",
+        ft = "📂",
+        init = "⚙",
+        keys = "🗝",
+        plugin = "🔌",
+        runtime = "💻",
+        require = "🌙",
+        source = "📄",
+        start = "🚀",
+        task = "📌",
+        lazy = "💤 ",
+      },
     },
   },
 })
-
 -- Apply vscode.nvim after the UI is fully loaded and the loading screen is gone
 -- vim.api.nvim_create_autocmd("UIEnter", {
 --   callback = function()

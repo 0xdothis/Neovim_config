@@ -44,6 +44,14 @@ vim.cmd([[
   hi! link markdownBold Bold
 ]])
 
+-- Cairo lang formatter
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.cairo",
+  callback = function()
+    vim.cmd("silent! !scarb fmt %") -- Run forge fmt
+    vim.cmd("e!") -- Reload the file to reflect changes
+  end,
+})
 -- Format move files
 -- vim.api.nvim_create_autocmd("BufWritePre", {
 --   pattern = "*.move",

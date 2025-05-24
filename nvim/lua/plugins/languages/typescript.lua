@@ -57,7 +57,7 @@ return {
               function()
                 local position_params = vim.lsp.util.make_position_params()
                 local params = {
-                  command = "typescript.goToSourceDefinition",
+                  command = "typescript.",
                   arguments = { position_params.textDocument.uri, position_params.position },
                 }
                 require("trouble").open({
