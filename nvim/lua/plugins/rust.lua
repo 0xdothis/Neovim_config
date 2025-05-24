@@ -1,41 +1,40 @@
 return {
+
   {
     "mrcjkb/rustaceanvim",
-    version = "^4",
+    version = "^6",
     ft = { "rust" },
-    opts = {
-      server = {
-        on_attach = function(_, bufnr)
-          require("config.jump-to-definition").on_attach(_, bufnr)
-          -- Format on save through LazyVim's built-in mechanisms
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            callback = function()
-              -- First ensure the file is valid Rust
-              if vim.bo[bufnr].filetype == "rust" then
-                -- Check for Solana project markers
-                local is_solana = vim.fn.expand("%:p"):lower():find("solana") ~= nil
-                  or vim.fn.filereadable(vim.fn.expand("%:p:h") .. "/Anchor.toml") == 1
-                  or vim.fn.filereadable(vim.fn.expand("%:p:h:h") .. "/Anchor.toml") == 1
-                -- Additional Solana-specific cleanup
-                if is_solana then
-                  vim.cmd([[keeppatterns %s/\s\+$//e]]) -- Remove trailing whitespace
+    init = function()
+      vim.g.rustaceanvim = {
+        server = {
+          on_attach = function(_, bufnr)
+            require("config.jump-to-definition").on_attach(_, bufnr)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              callback = function()
+                if vim.bo[bufnr].filetype == "rust" then
+                  local is_solana = vim.fn.expand("%:p"):lower():find("solana") ~= nil
+                    or vim.fn.filereadable(vim.fn.expand("%:p:h") .. "/Anchor.toml") == 1
+                    or vim.fn.filereadable(vim.fn.expand("%:p:h:h") .. "/Anchor.toml") == 1
+                  if is_solana then
+                    vim.cmd([[keeppatterns %s/\s\+$//e]])
+                  end
                 end
-              end
-            end,
-          })
-        end,
-        settings = {
-          ["rust-analyzer"] = {
-            cargo = { allFeatures = true },
-            checkOnSave = {
-              command = "clippy",
-              extraArgs = { "--no-deps" }, -- Faster checks
+              end,
+            })
+          end,
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = { allFeatures = true },
+              checkOnSave = {
+                command = "clippy",
+                extraArgs = { "--no-deps" },
+              },
             },
           },
         },
-      },
-    },
+      }
+    end,
   },
 
   {

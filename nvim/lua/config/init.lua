@@ -17,7 +17,7 @@ vim.g.loaded_netrwPlugin = 1
 
 require("config.options")
 require("config.keymaps")
-require("config.autocmds")
+-- require("config.autocmds")
 require("config.helpers")
 require("noice").setup({ enabled = false })
 require("snacks").setup({ image = { enabled = false } })

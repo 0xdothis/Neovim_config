@@ -3,3 +3,6 @@
 -- Add any additional keymaps here
 -- Format SQL with pg_format manually
 vim.keymap.set("n", "<leader>pf", ":%!pg_format -<CR>", { desc = "[P]ostgres [F]ormat" })
+
+-- vim.keymap.set("n", "<leader>r", "<cmd>NeotreeRefresh<CR>", { desc = "♻️ Refresh Neo-tree" })
+vim.keymap.set("n", "<leader>rr", ":source %<CR>", { desc = "♻️Reload current file (source %)" })

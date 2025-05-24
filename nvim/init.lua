@@ -1,7 +1,7 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
 require("config.autocmds")
-require("neotest.logging"):set_level(vim.log.levels.INFO)
+-- require("neotest.logging"):set_level(vim.log.levels.INFO)
 -- Transparency config
 -- Set clipboard to use system clipboard
 vim.opt.clipboard = "unnamedplus"
