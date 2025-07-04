@@ -1,5 +1,47 @@
 return {
-
+  -- {
+  --   "mrcjkb/rustaceanvim",
+  --   version = "^6",
+  --   ft = { "rust" },
+  --   init = function()
+  --     vim.g.rustaceanvim = {
+  --       server = {
+  --         on_attach = function(_, bufnr)
+  --           require("config.jump-to-definition").on_attach(_, bufnr)
+  --           vim.api.nvim_create_autocmd("BufWritePre", {
+  --             buffer = bufnr,
+  --             callback = function()
+  --               if vim.bo[bufnr].filetype == "rust" then
+  --                 local is_solana = vim.fn.expand("%:p"):lower():find("solana") ~= nil
+  --                   or vim.fn.filereadable(vim.fn.expand("%:p:h") .. "/Anchor.toml") == 1
+  --                   or vim.fn.filereadable(vim.fn.expand("%:p:h:h") .. "/Anchor.toml") == 1
+  --                 if is_solana then
+  --                   vim.cmd([[keeppatterns %s/\s\+$//e]])
+  --                 end
+  --               end
+  --             end,
+  --           })
+  --         end,
+  --         settings = {
+  --           ["rust-analyzer"] = {
+  --             cargo = {
+  --               allFeatures = false, -- Disable this to manually specify features
+  --               features = { "rpc-compat", "serde-bincode-compat" }, -- Explicitly enable your features
+  --             },
+  --             checkOnSave = {
+  --               command = "clippy",
+  --               extraArgs = { "--features", "rpc-compat serde-bincode-compat" }, -- Enable for checks
+  --               features = { "rpc-compat", "serde-bincode-compat" }, -- Also specify here
+  --             },
+  --             procMacro = {
+  --               enable = true,
+  --             },
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
   {
     "mrcjkb/rustaceanvim",
     version = "^6",
@@ -26,7 +68,8 @@ return {
           settings = {
             ["rust-analyzer"] = {
               cargo = { allFeatures = true },
-              checkOnSave = {
+              checkOnSave = true, -- Changed to boolean
+              check = { -- Moved command and extraArgs here
                 command = "clippy",
                 extraArgs = { "--no-deps" },
               },
