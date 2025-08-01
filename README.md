@@ -1,4 +1,4 @@
-# Neovim Configufigurations.
+# Neovim Configurations.
 
 ## What's Neovim
 
