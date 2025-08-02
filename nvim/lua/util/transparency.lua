@@ -12,7 +12,7 @@ local transparent_groups = {
   "VertSplit",
   "StatusLine",
   "LineNr",
-  "CursorLine",
+  -- "CursorLine",
   -- "Visual",
   -- "VisualNOS",
   "CmpItemAbbrMatch",
