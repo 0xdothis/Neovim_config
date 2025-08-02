@@ -7,7 +7,7 @@ Neovim is a text editor that is based on Vim, but with a focus on improving usab
 ## How to use this Configuration
 
 - You must have successfully installed Neovim
-- You can also install an neovim setup e.g Lazyvim
+- You can also install a neovim setup e.g Lazyvim
 
 After successfully installation check if you have the nvim folder in your config folder
 
